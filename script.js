@@ -18,6 +18,7 @@ const conversation = [];
 let openaiApiKey = '';
 let recognition;
 let isListening = false;
+let transcriptText = '';
 
 function closeApiModal(apiKey) {
   openaiApiKey = apiKey.trim();
@@ -52,8 +53,8 @@ function setRecordingState(recording) {
   micButton.classList.toggle('listening', recording);
   recordingIndicator.hidden = !recording;
   micButton.setAttribute('aria-pressed', String(recording));
-  micButton.setAttribute('aria-label', recording ? 'Parar gravação' : 'Falar com a Lumi');
-  micButton.title = recording ? 'Parar gravação' : 'Falar com a Lumi';
+  micButton.setAttribute('aria-label', recording ? 'Parar gravação' : 'Iniciar gravação');
+  micButton.title = recording ? 'Parar gravação' : 'Iniciar gravação';
   if (recording) connectionLabel.textContent = 'estou ouvindo...';
 }
 
@@ -114,6 +115,10 @@ async function askLumi(question) {
 
 composer.addEventListener('submit', (event) => {
   event.preventDefault();
+  if (isListening) {
+    recognition.stop();
+    return;
+  }
   askLumi(input.value);
 });
 
@@ -133,12 +138,28 @@ const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecogni
 if (SpeechRecognition) {
   recognition = new SpeechRecognition();
   recognition.lang = 'pt-BR';
-  recognition.interimResults = false;
-  recognition.continuous = false;
-  recognition.onstart = () => setRecordingState(true);
-  recognition.onresult = (event) => { input.value = event.results[0][0].transcript; askLumi(input.value); };
+  recognition.interimResults = true;
+  recognition.continuous = true;
+  recognition.onstart = () => {
+    transcriptText = '';
+    input.value = '';
+    setRecordingState(true);
+  };
+  recognition.onresult = (event) => {
+    let interimText = '';
+    for (let index = event.resultIndex; index < event.results.length; index += 1) {
+      const transcript = event.results[index][0].transcript;
+      if (event.results[index].isFinal) transcriptText += `${transcript} `;
+      else interimText += transcript;
+    }
+    input.value = `${transcriptText}${interimText}`.trim();
+  };
   recognition.onerror = () => { setRecordingState(false); connectionLabel.textContent = 'não consegui ouvir'; };
-  recognition.onend = () => { setRecordingState(false); if (avatar.classList.contains('thinking')) connectionLabel.textContent = 'Lumi está pensando...'; };
+  recognition.onend = () => {
+    setRecordingState(false);
+    if (avatar.classList.contains('thinking')) connectionLabel.textContent = 'Lumi está pensando...';
+    else if (input.value.trim()) connectionLabel.textContent = 'texto pronto para enviar';
+  };
   micButton.addEventListener('click', () => { if (isListening) recognition.stop(); else recognition.start(); });
 } else {
   micButton.disabled = true;

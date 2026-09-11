@@ -36,7 +36,8 @@
     </header>
 
     <section class="hero" id="inicio">
-      <div class="intro">
+      <div class="chat-column">
+        <div class="intro">
         <p class="eyebrow">sua parceira de estudos</p>
         <h1>Oi, eu sou a <em>Lumi.</em></h1>
         <p class="intro-copy">Uma ajudante curiosa para transformar dúvidas em descobertas. Pode falar comigo sobre as matérias da escola.</p>
@@ -45,6 +46,35 @@
           <button class="topic-chip" data-prompt="Me ajude a entender a Revolução Industrial">História</button>
           <button class="topic-chip" data-prompt="Como funciona a regra de três?">Matemática</button>
         </div>
+      </div>
+
+      <section class="conversation-panel" aria-labelledby="conversationTitle">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">agora</p>
+            <h2 id="conversationTitle">O que você quer descobrir?</h2>
+          </div>
+          <button class="clear-button" id="clearButton" type="button" title="Limpar conversa">Limpar</button>
+        </div>
+
+        <div class="messages" id="messages" aria-live="polite">
+          <article class="message message-lumi">
+            <div class="message-avatar">✦</div>
+            <div><span class="message-author">Lumi</span><p>Estou aqui! Fale ou escreva sua dúvida e vamos pensar juntos.</p></div>
+          </article>
+        </div>
+
+        <form class="composer" id="composer">
+          <button class="mic-button" id="micButton" type="button" aria-label="Iniciar gravação" title="Iniciar gravação"><span class="mic-icon">●</span></button>
+          <input id="questionInput" type="text" placeholder="Digite uma pergunta ou toque no microfone..." autocomplete="off">
+          <button class="send-button" type="submit" aria-label="Enviar pergunta" title="Enviar pergunta"><span>Enviar</span><span class="send-arrow">↗</span></button>
+        </form>
+        <div class="recording-indicator" id="recordingIndicator" role="status" aria-live="assertive" hidden>
+          <span class="recording-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+          <span>Gravando sua pergunta...</span>
+        </div>
+        <p class="privacy-note">A Lumi pode cometer erros. Use suas fontes e o professor para conferir respostas importantes.</p>
+      </section>
       </div>
 
       <div class="avatar-stage" aria-label="Avatar animado da Lumi">
@@ -67,33 +97,6 @@
       </div>
     </section>
 
-    <section class="conversation-panel" aria-labelledby="conversationTitle">
-      <div class="panel-heading">
-        <div>
-          <p class="eyebrow">agora</p>
-          <h2 id="conversationTitle">O que você quer descobrir?</h2>
-        </div>
-        <button class="clear-button" id="clearButton" type="button" title="Limpar conversa">Limpar</button>
-      </div>
-
-      <div class="messages" id="messages" aria-live="polite">
-        <article class="message message-lumi">
-          <div class="message-avatar">✦</div>
-          <div><span class="message-author">Lumi</span><p>Estou aqui! Fale ou escreva sua dúvida e vamos pensar juntos.</p></div>
-        </article>
-      </div>
-
-      <form class="composer" id="composer">
-        <button class="mic-button" id="micButton" type="button" aria-label="Falar com a Lumi" title="Falar com a Lumi"><span class="mic-icon">●</span></button>
-        <input id="questionInput" type="text" placeholder="Digite uma pergunta ou toque no microfone..." autocomplete="off">
-        <button class="send-button" type="submit" aria-label="Enviar pergunta" title="Enviar pergunta"><span>Enviar</span><span class="send-arrow">↗</span></button>
-      </form>
-      <div class="recording-indicator" id="recordingIndicator" role="status" aria-live="assertive" hidden>
-        <span class="recording-bars" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <span>Gravando sua pergunta...</span>
-      </div>
-      <p class="privacy-note">A Lumi pode cometer erros. Use suas fontes e o professor para conferir respostas importantes.</p>
-    </section>
   </main>
   <script src="script.js"></script>
 </body>
