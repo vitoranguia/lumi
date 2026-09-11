@@ -63,6 +63,9 @@ function speak(text) {
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.lang = 'pt-BR';
   utterance.rate = 1.03;
+  utterance.onstart = () => avatar.classList.add('speaking');
+  utterance.onend = () => avatar.classList.remove('speaking');
+  utterance.onerror = () => avatar.classList.remove('speaking');
   window.speechSynthesis.speak(utterance);
 }
 
